@@ -35,13 +35,16 @@ router.get("/decode", async (req, res) => {
   res.json(rawData);
 });
 
-router.delete("/destroy", async (req, res) => {
+router.delete("/destroy", (req, res) => {
   const { body } = req;
-  console.log(req.session);
-  console.log(body);
+
   if (req.session[body]) {
-    delete req.session[body];
-    console.log(req.session);
+    req.session.destroy(function(err) {
+      if (err) {
+        console.log("세션삭제 에러");
+        return;
+      }
+    });
   }
   res.json({ result: "ㅗㅑ" });
 });
