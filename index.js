@@ -18,7 +18,7 @@ app.use(bodyParser.text());
 
 app.use(
   session({
-    secret: "suseodd",
+    secret: "didakeknklnsdf",
     resave: false,
     saveUninitialized: true
   })

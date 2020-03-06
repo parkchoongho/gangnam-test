@@ -4,7 +4,8 @@ function isEmpty(obj) {
 
 export const checkBlank = (req, res, next) => {
   if (isEmpty(req.body) && isEmpty(req.query)) {
-    res.status(404).end();
+    res.status(404).send("비어있는 값을 입력하셨습니다.");
+    return;
   }
   next();
 };
