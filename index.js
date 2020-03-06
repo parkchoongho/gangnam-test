@@ -5,6 +5,8 @@ import bodyParser from "body-parser";
 
 import apiRouter from "./router/apiRouter";
 
+import { checkBlank } from "./middleware/checkBlank";
+
 dotenv.config();
 
 const app = express();
@@ -22,7 +24,7 @@ app.use(
   })
 );
 
-app.use("/api", apiRouter);
+app.use("/api", checkBlank, apiRouter);
 
 const handleListening = () => {
   console.log(`✅  Listening on PORT: ${PORT}`);

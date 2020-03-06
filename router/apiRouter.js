@@ -9,7 +9,7 @@ const router = express.Router();
 router.post("/encode", async (req, res) => {
   try {
     const { body } = req;
-    console.log(jwtConfig.jwtSecret);
+
     const webtoken = await jwt.sign(body, jwtConfig.jwtSecret, {
       expiresIn: "1h"
     });
@@ -27,26 +27,29 @@ router.post("/encode", async (req, res) => {
 });
 
 router.get("/decode", async (req, res) => {
-  const {
-    query: { jwt }
-  } = req;
-  const rawData = await jwtDecode(jwt);
-  console.log(req.session);
-  res.json(rawData);
+  try {
+    const {
+      query: { jwt }
+    } = req;
+
+    const rawData = await jwtDecode(jwt);
+    console.log(req.session);
+    res.json(rawData);
+  } catch (error) {
+    res.status(500).json({
+      result: false,
+      error
+    });
+  }
 });
 
-router.delete("/destroy", (req, res) => {
+router.delete("/destroy", (req, res, next) => {
   const { body } = req;
 
   if (req.session[body]) {
-    req.session.destroy(function(err) {
-      if (err) {
-        console.log("세션삭제 에러");
-        return;
-      }
-    });
+    delete req.session[body];
   }
-  res.json({ result: "ㅗㅑ" });
+  next();
 });
 
 export default router;
