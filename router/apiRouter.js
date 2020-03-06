@@ -14,13 +14,13 @@ router.post("/encode", async (req, res) => {
 
     const { body } = req;
 
-    const webtoken = await jwt.sign(body, jwtConfig.jwtSecret, {
+    const token = jwt.sign(body, jwtConfig.jwtSecret, {
       expiresIn: "1h"
     });
-    req.session[webtoken] = true;
+    req.session[token] = true;
     console.log(req.session);
     res.json({
-      result: webtoken
+      result: token
     });
   } catch (error) {
     res.status(500).json({
@@ -36,7 +36,7 @@ router.get("/decode", async (req, res) => {
       query: { token }
     } = req;
 
-    const rawData = await jwt.verify(token, jwtConfig.jwtSecret);
+    const rawData = jwt.verify(token, jwtConfig.jwtSecret);
     console.log(req.session);
     res.json(rawData);
   } catch (error) {
