@@ -1,5 +1,6 @@
 import express from "express";
 import jwt from "jsonwebtoken";
+import jwtDecode from "jwt-decode";
 
 import { jwtConfig } from "../common/jwt_config";
 
@@ -9,7 +10,7 @@ router.post("/encode", async (req, res) => {
   try {
     const { body } = req;
     console.log(jwtConfig.jwtSecret);
-    const webtoken = jwt.sign(body, jwtConfig.jwtSecret, {
+    const webtoken = await jwt.sign(body, jwtConfig.jwtSecret, {
       expiresIn: "1h"
     });
     req.session[webtoken] = true;
@@ -26,11 +27,23 @@ router.post("/encode", async (req, res) => {
 });
 
 router.get("/decode", async (req, res) => {
-  res.send("GET Decode");
+  const {
+    query: { jwt }
+  } = req;
+  const rawData = await jwtDecode(jwt);
+  console.log(req.session);
+  res.json(rawData);
 });
 
 router.delete("/destroy", async (req, res) => {
-  res.send("DELETE Destroy");
+  const { body } = req;
+  console.log(req.session);
+  console.log(body);
+  if (req.session[body]) {
+    delete req.session[body];
+    console.log(req.session);
+  }
+  res.json({ result: "ㅗㅑ" });
 });
 
 export default router;
