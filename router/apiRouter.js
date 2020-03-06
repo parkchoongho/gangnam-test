@@ -1,6 +1,5 @@
 import express from "express";
 import jwt from "jsonwebtoken";
-import jwtDecode from "jwt-decode";
 
 import { jwtConfig } from "../common/jwt_config";
 
@@ -34,14 +33,14 @@ router.post("/encode", async (req, res) => {
 router.get("/decode", async (req, res) => {
   try {
     const {
-      query: { jwt }
+      query: { token }
     } = req;
 
-    const rawData = await jwtDecode(jwt);
+    const rawData = await jwt.verify(token, jwtConfig.jwtSecret);
     console.log(req.session);
     res.json(rawData);
   } catch (error) {
-    res.status(500).json({
+    res.json({
       result: false,
       error
     });
