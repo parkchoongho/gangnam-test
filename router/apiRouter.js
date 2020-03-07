@@ -8,7 +8,11 @@ const router = express.Router();
 router.post("/encode", async (req, res) => {
   try {
     if (req.get("Content-Type") !== "application/json") {
-      res.status(404).send("입력 값 Type이 잘못 되었습니다.");
+      res
+        .status(404)
+        .send(
+          "요청 헤더의 Content-Type이 잘못 되었습니다. JSON 형태로 입력해주세요."
+        );
       return;
     }
 
@@ -49,7 +53,11 @@ router.get("/decode", async (req, res) => {
 
 router.delete("/destroy", (req, res, next) => {
   if (req.get("Content-Type") !== "text/plain") {
-    res.status(404).send("입력 값 Type이 잘못 되었습니다.");
+    res
+      .status(404)
+      .send(
+        "요청 헤더의 Content-Type이 잘못 되었습니다. Text 형태로 입력해주세요"
+      );
     return;
   }
 
